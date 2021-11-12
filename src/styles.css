@@ -1,0 +1,12 @@
+body{
+    background-color: white;
+}
+
+.character{
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    background-color: rgb(128, 0, 0);
+    /* position: absolute;
+    bottom: 30px; */
+}
