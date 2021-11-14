@@ -1,26 +1,56 @@
-let character = document.querySelector('.character');
+const PLAYGROUND = document.querySelector('.playground');
+const CTX = PLAYGROUND.getContext('2d');
+const PLAYGROUND_WIDTH = PLAYGROUND.width = 600;
+const PLAYGROUND_HEIGHT = PLAYGROUND.height = 600;
 
-const MOVE = 20;
+const CHARACTER = new Image();
+CHARACTER.src = '../assets/sprite-sheet.png';
+let characterState = 'idle'
 
-window.addEventListener('load', () => {
-    character.style.position = 'absolute';
-    character.style.left = 0;
-    character.style.top = 0;
-});
+// Image width / number of columns. 6876/12
+const SPRITEWIDTH = 575;
+// Image height / number of rows. 5230/10
+const SPRITEHEIGHT = 523;
 
-window.addEventListener('keydown', (e) => {
-    switch (e.key) {
-        case 'ArrowLeft':
-            character.style.left = parseInt(character.style.left) - MOVE + 'px';
-            break;
-        case 'ArrowRight':
-            character.style.left = parseInt(character.style.left) + MOVE + 'px';
-            break;
-        case 'ArrowUp':
-            character.style.top = parseInt(character.style.top) - MOVE + 'px';
-            break;
-        case 'ArrowDown':
-            character.style.top = parseInt(character.style.top) + MOVE + 'px';
-            break;
+/**
+ * RUN ANIMATIONS AFTER CERTAIN FRAMES
+ */
+let gameframe = 0;
+const STAGGER_FRAME = 7;
+
+// Animation meta data
+const ANIMATIONS_METADATA = []
+const ANIMATION_DESCRIPTION = [
+    {
+        name: 'idle',
+        frames: 7,
+    },
+    {
+        name: 'jump',
+        frames: 7,
+    },
+]
+
+ANIMATION_DESCRIPTION.forEach((state, idx) => {
+    let frames = {
+        loc: [],
     }
-});
+    for(let i = 0; i < state.frames ; i++){
+        frames.loc.push({x: i * SPRITEWIDTH, y: idx * SPRITEHEIGHT})
+    }
+    ANIMATIONS_METADATA[state.name] = frames;
+})
+
+// GAME LOOP
+function animate(){
+    CTX.clearRect(0, 0, PLAYGROUND_WIDTH, PLAYGROUND_HEIGHT);
+    let position = Math.floor(gameframe/STAGGER_FRAME) % ANIMATIONS_METADATA[characterState].loc.length;
+    let frameX = SPRITEWIDTH * position;
+    let frameY = SPRITEHEIGHT * ANIMATIONS_METADATA[characterState].loc[position].y;
+    CTX.drawImage(CHARACTER, frameX, frameY, SPRITEWIDTH, SPRITEHEIGHT,
+        0, 0, SPRITEWIDTH, SPRITEHEIGHT);
+
+    gameframe++;
+    requestAnimationFrame(animate);
+};
+animate();
