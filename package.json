@@ -1,9 +1,10 @@
 {
   "name": "resume",
+  "author": "Amanpreet Singh",
+  "version": "0.0.2",
   "scripts": {
-    "build": "esbuild --bundle src/main.js --outfile=www/main.js --minify",
-    "dev": "esbuild --bundle src/main.js --outfile=www/main.js --servedir=www",
-    "bundle": "npm run build && mkdir dist && 7z a dist/game.zip www"
+    "build": "esbuild --bundle src/GameManager.js --outfile=www/main.js --minify",
+    "dev": "esbuild --bundle src/GameManager.js --outfile=www/main.js --servedir=www"
   },
   "dependencies": {
     "kaboom": "^3000.1.17"
